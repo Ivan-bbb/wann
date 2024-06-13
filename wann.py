@@ -46,6 +46,8 @@ class Genome:
         self.connections: dict[tuple[int, int], Connection] = dict()
         self.nodes: list[Node] = list()
         self.fitness: float = 0
+        self.adjusted_fitness: float = 0
+        self.best_weight = 0
 
     def set_weights(self, value: float):
         for conn in self.connections.values():
@@ -57,11 +59,7 @@ class Genome:
         node.activation = act
 
     def mutate_disable_connection(self):
-        possible_connections = []
-
-        for conn in self.connections.values():
-            if conn.enabled:
-                possible_connections.append(conn)
+        possible_connections = [conn for conn in self.connections.values() if conn.enabled]
 
         if not possible_connections:
             return
@@ -70,11 +68,7 @@ class Genome:
         conn.enabled = False
 
     def mutate_enable_connection(self):
-        possible_connections = []
-
-        for conn in self.connections.values():
-            if not conn.enabled:
-                possible_connections.append(conn)
+        possible_connections = [conn for conn in self.connections.values() if not conn.enabled]
 
         if not possible_connections:
             return
