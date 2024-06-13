@@ -3,6 +3,8 @@ from dataclasses import dataclass
 
 @dataclass
 class Configuration:
+    save_interval: int = 5
+
     max_depth: int = 10
     pop_size: int = 100
     target_species: int = 15

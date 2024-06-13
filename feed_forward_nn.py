@@ -80,7 +80,7 @@ class NeuralNetwork:
 
         edge_labels = {}
         for conn in self.connections:
-            edge_color = "red" if conn.weight > 0 else "black"
+            edge_color = "black"
             G.add_edge(conn.from_node.id, conn.to_node.id, color=edge_color)
             edge_labels[(conn.from_node.id, conn.to_node.id)] = (f"{conn.weight:.2f}")
 

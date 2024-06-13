@@ -5,6 +5,7 @@ from cancer import CancerTask
 from diabetes import DiabetesTask
 import matplotlib.pyplot as plt
 import numpy as np
+from config import config
 
 def save_genome(genome: Genome, postfix: str = ""):
     nn = NeuralNetwork(genome)
@@ -14,12 +15,12 @@ def save_fitness_graph(champions: list[Genome]):
     g = np.arange(0, len(champions), 1)
     fitness_history = [champion.fitness for champion in champions]
 
+    plt.clf()
     plt.plot(g, fitness_history)
     plt.xlabel("Generation")
     plt.ylabel("Best fitness")
     plt.grid()
     plt.savefig(f"./graphs/{task_name}")
-    plt.show()
 
 
 if __name__ == "__main__":
@@ -30,7 +31,7 @@ if __name__ == "__main__":
         for generation in range(max_generations):
             population.evolve()
             print(f"[{generation}] Best fitness: {population.champions[-1].fitness}; Species: {len(population.species)}")
-            if generation % 5 == 0:
+            if generation % config.save_interval == 0:
                 champion = population.champions[-1]
                 save_genome(champion)
                 nn = NeuralNetwork(champion)
