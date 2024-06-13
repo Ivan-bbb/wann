@@ -62,14 +62,6 @@ class CancerTask(Task):
             total_fitness += fitness
 
         return total_fitness / len(self.train_data)
-    
-    # def calculate_accuracy(self, y_true, y_pred) -> float:
-    #     correct = 0
-    #     for y_pr, y_tr in zip(y_pred, y_true):
-    #         if (np.abs(np.array(y_pr) - np.array(y_tr)) < 0.5).all():
-    #             correct += 1
-    #     # print("correct", correct)
-    #     return correct / len(y_true)
 
     def solve(self, neural_network: NeuralNetwork) -> bool:
         return self.evaluate(neural_network) > self._threshold

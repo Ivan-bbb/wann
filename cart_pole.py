@@ -56,7 +56,6 @@ class CartPoleTask(Task):
 
     def solve(self, neural_network: NeuralNetwork) -> bool:
         average_reward = self.evaluate(neural_network)
-        # print("avg reward", average_reward)
         return average_reward >= self._threshold
 
     def visualize(self, neural_network: NeuralNetwork):

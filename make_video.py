@@ -3,7 +3,7 @@ import glob
 from natsort import natsorted
 import imageio
 
-task_name = "cancer"
+task_name = "cartPole"
 folder_dir = f"./topology_images/generations/{task_name}"
 
 filenames = glob.glob(f"{folder_dir}/*.png")

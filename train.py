@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from config import config
 
-task = CancerTask
+task = CartPoleTask
 
 def save_genome(genome: Genome, postfix: str = ""):
     nn = NeuralNetwork(genome)
@@ -23,6 +23,7 @@ def save_fitness_graph(polulation: Population):
 
     plt.plot(g, best_fitness_history, label = "Best") 
     plt.plot(g, average_fitness_history, label = "Average") 
+    plt.title(task_name)
     plt.legend()
     plt.xlabel("Generation")
     plt.ylabel("Fitness")
