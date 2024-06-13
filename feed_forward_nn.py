@@ -1,4 +1,5 @@
 from wann import Genome
+import pickle
 
 
 class NeuralNetwork:
@@ -35,3 +36,12 @@ class NeuralNetwork:
     def set_weights(self, weight: float):
         for conn in self.connections:
             conn.weight = weight
+
+    def save(self, filename: str):
+        with open(filename, 'wb') as f:
+            pickle.dump(self.genome, f)
+
+    def load(filename: str) -> "NeuralNetwork":
+        with open(filename, 'rb') as f:
+            genome = pickle.load(f)
+        return NeuralNetwork(genome)

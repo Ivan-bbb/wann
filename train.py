@@ -5,7 +5,8 @@ from cancer import CancerTask
 from diabetes import DiabetesTask
 
 def save_genome(genome: Genome, postfix: str = ""):
-    pass
+    nn = NeuralNetwork(genome)
+    nn.save(f"./outputs/{task_name}/{generation}{postfix}")
 
 
 if __name__ == "__main__":
@@ -24,7 +25,7 @@ if __name__ == "__main__":
             print(f"Champion fitness {champion.fitness}")
             save_genome(champion, "_solved")
 
-            test_nn = NeuralNetwork(champion)
+            nn = NeuralNetwork(champion)
             # test_nn.visualize(show_weights=True, save=True, name=task_name)
-            population.task.visualize(test_nn)
+            population.task.visualize(nn)
             break
