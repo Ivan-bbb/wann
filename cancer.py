@@ -58,20 +58,39 @@ class CancerTask(Task):
             total_fitness += fitness
 
         return total_fitness / len(self.train_data)
-
+    
+    # def calculate_accuracy(self, y_true, y_pred) -> float:
+    #     correct = 0
+    #     for y_pr, y_tr in zip(y_pred, y_true):
+    #         if (np.abs(np.array(y_pr) - np.array(y_tr)) < 0.5).all():
+    #             correct += 1
+    #     # print("correct", correct)
+    #     return correct / len(y_true)
 
     def solve(self, neural_network: NeuralNetwork) -> bool:
         return self.evaluate(neural_network) > self.threshold
 
     def visualize(self, neural_network: NeuralNetwork):
-        correct = 0
-        wrong = 0
+        correct_train = 0
+        wrong_train = 0
+        correct_test = 0
+        wrong_test = 0
+
+        for x_train, y_train in zip(self.train_data, self.train_labels):
+            y_pred = neural_network.feed(x_train)
+
+            if (np.abs(np.array(y_pred) - np.array(y_train)) < 0.5).all():
+                correct_train += 1
+            else:
+                wrong_train += 1
+
         for x_test, y_test in zip(self.test_data, self.test_labels):
             y_pred = neural_network.feed(x_test)
 
             if (np.abs(np.array(y_pred) - np.array(y_test)) < 0.5).all():
-                correct += 1
+                correct_test += 1
             else:
-                wrong += 1
+                wrong_test += 1
 
-        print(f"Correct answers: {correct}; wrong answers: {wrong}")
+        print(f"Train accuracy = {round(correct_train / len(self.train_data) * 100, 2)}% ({correct_train}/{len(self.train_data)}) \
+              \nTest accuracy = {round(correct_test / len(self.test_data) * 100, 2)}% ({correct_test}/{len(self.test_data)})")

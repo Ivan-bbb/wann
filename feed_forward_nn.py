@@ -1,5 +1,7 @@
 from wann import Genome
 import pickle
+import networkx as nx
+import matplotlib.pyplot as plt
 
 
 class NeuralNetwork:
@@ -45,3 +47,62 @@ class NeuralNetwork:
         with open(filename, 'rb') as f:
             genome = pickle.load(f)
         return NeuralNetwork(genome)
+    
+    def visualize(self, save=True, name=""):
+        G = nx.DiGraph()
+
+        pos = {}
+        labels = {}
+
+        layers = sorted(set(node.layer for node in self.nodes.values()))
+        layer_nodes = {
+            layer: [node for node in self.nodes.values() if node.layer == layer]
+            for layer in layers
+        }
+
+        max_nodes_in_layer = max(len(nodes) for nodes in layer_nodes.values())
+        horizontal_spacing = 2
+        vertical_spacing = 2
+
+        for layer in layers:
+            nodes = layer_nodes[layer]
+            num_nodes = len(nodes)
+            y_offset = (max_nodes_in_layer - num_nodes) * vertical_spacing / 2
+            for i, node in enumerate(nodes):
+                pos[node.id] = (
+                    layer * horizontal_spacing,
+                    i * vertical_spacing + y_offset,
+                )
+                if layer == 0 and i == len(nodes) - 1:
+                    labels[node.id] = "bias"
+                else:
+                    labels[node.id] = f"{node.id} ({node.layer})\n{node.activation.name}"
+
+        edge_labels = {}
+        for conn in self.connections:
+            edge_color = "red" if conn.weight > 0 else "black"
+            G.add_edge(conn.from_node.id, conn.to_node.id, color=edge_color)
+            edge_labels[(conn.from_node.id, conn.to_node.id)] = (f"{conn.weight:.2f}")
+
+        edges = G.edges()
+        colors = [G[u][v]["color"] for u, v in edges]
+
+        plt.figure(figsize=(15, 10))
+        nx.draw(
+            G,
+            pos,
+            with_labels=True,
+            labels=labels,
+            node_size=2500,
+            node_color="orange",
+            font_size=8,
+            font_weight="bold",
+            arrowsize=15,
+            edge_color=colors,
+        )
+        nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color="blue")
+
+        plt.title("Neural Network")
+        if(save):
+            plt.savefig(f'./solutions/{name}_solution.png')
+        plt.show()
