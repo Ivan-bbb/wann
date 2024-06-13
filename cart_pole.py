@@ -15,7 +15,7 @@ class CartPoleTask(Task):
         self._input_nodes = self.env.observation_space.shape[0]
         self._output_nodes = 2
         self._threshold = 0.9
-        print(f"Starting '{self._name}' task with {self._input_nodes} inputs and {self._output_nodes} outputs")
+        print(f"'{self._name}' task. inputs = {self._input_nodes}; outputs = {self._output_nodes}")
     
     @property
     def name(self) -> str:

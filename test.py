@@ -5,12 +5,12 @@ from diabetes import DiabetesTask
 from cart_pole import CartPoleTask
 from config import config
 
-task = CartPoleTask
+task = CancerTask
 
 if __name__ == "__main__":
     population = Population(task)
     task_name = population.task.name
-    nn = NeuralNetwork.load(f"./topology_genomes/{task_name}/8_solved")
+    nn = NeuralNetwork.load(f"./topology_genomes/{task_name}/32_solved")
 
     for weight in config.weights_pool:
         if abs(weight - nn.genome.best_weight) < 0.001:
