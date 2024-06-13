@@ -5,15 +5,15 @@ from base_task import Task
 
 
 def init_dataset():
-    file_path = "data/cancer/cancer2.dt"
+    file_path = "data/cancer/cancer.raw"
     data_input = []
     data_output = []
     with open(file_path, "r") as file:
         for line in file:
-            values = line.strip().split(" ")
+            values = line.strip().split(",")
             try:
-                data = [float(value) for value in values[:9]]
-                labels = [int(value) for value in values[9:]]
+                data = [int(value)/10 for value in values[1:-1]]
+                labels = [0 if int(values[-1]) == 2 else 1]
             except ValueError:
                 continue
             data_input.append(data)
