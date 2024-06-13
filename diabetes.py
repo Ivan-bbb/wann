@@ -31,14 +31,14 @@ def mse(y_true, y_pred):
 
 class DiabetesTask(Task):
     def __init__(self):
-        self.threshold = 0.9
+        self._threshold = 0.75
         input_data, output_data = init_dataset()
         self.train_data = input_data[:384]
         self.train_labels = output_data[:384]
         self.test_data = input_data[384:]
         self.test_labels = output_data[384:]
 
-        self._name = "Diabetes"
+        self._name = "diabetes"
         self._input_nodes = 8
         self._output_nodes = 2
         print(f"Starting '{self._name}' task with {self._input_nodes} inputs and {self._output_nodes} outputs")
@@ -54,6 +54,10 @@ class DiabetesTask(Task):
     @property
     def output_nodes(self) -> int:
         return self._output_nodes
+    
+    @property
+    def threshold(self) -> int:
+        return self._threshold
 
     def evaluate(self, neural_network: NeuralNetwork) -> float:
         total_fitness = 0
@@ -67,17 +71,29 @@ class DiabetesTask(Task):
 
 
     def solve(self, neural_network: NeuralNetwork) -> bool:
-        return self.evaluate(neural_network) > self.threshold
+        return self.evaluate(neural_network) > self._threshold
 
     def visualize(self, neural_network: NeuralNetwork):
-        correct = 0
-        wrong = 0
+        correct_train = 0
+        wrong_train = 0
+        correct_test = 0
+        wrong_test = 0
+
+        for x_train, y_train in zip(self.train_data, self.train_labels):
+            y_pred = neural_network.feed(x_train)
+
+            if (np.abs(np.array(y_pred) - np.array(y_train)) < 0.5).all():
+                correct_train += 1
+            else:
+                wrong_train += 1
+
         for x_test, y_test in zip(self.test_data, self.test_labels):
             y_pred = neural_network.feed(x_test)
 
             if (np.abs(np.array(y_pred) - np.array(y_test)) < 0.5).all():
-                correct += 1
+                correct_test += 1
             else:
-                wrong += 1
+                wrong_test += 1
 
-        print(f"Correct answers: {correct}; wrong answers: {wrong}")
+        print(f"Train accuracy = {round(correct_train / len(self.train_data) * 100, 2)}% ({correct_train}/{len(self.train_data)}) \
+              \nTest accuracy = {round(correct_test / len(self.test_data) * 100, 2)}% ({correct_test}/{len(self.test_data)})")

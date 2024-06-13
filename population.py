@@ -20,6 +20,7 @@ class Population:
         self.species: list[Species] = []
         self.current_compatibility_threshold: int = config.comp_threshold
         self.champions: list[Genome] = []
+        self.average_fitness: list[float] = []
         self.task: Task = task()
         self.solved_at: int | None = None
         self.generation_id: int = 0
@@ -96,6 +97,7 @@ class Population:
             genome.fitness = self.evaluate_genome(genome)
         for specie in self.species:
             specie.recalculate()
+        self.average_fitness.append(sum(genome.fitness for genome in self.genomes) / len(self.genomes))
 
     def check_for_stagnation(self):
         for specie in self.species:
@@ -116,7 +118,7 @@ class Population:
         champion.set_weights(champion.best_weight)
         nn = NeuralNetwork(champion)
         
-        if self.task.solve(nn):
+        if self.task.solve(nn) and champion.fitness >= self.task.threshold:
             self.solved_at = self.generation_id
 
     def reproduce_offspring(self):

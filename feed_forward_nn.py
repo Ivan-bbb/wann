@@ -48,7 +48,7 @@ class NeuralNetwork:
             genome = pickle.load(f)
         return NeuralNetwork(genome)
     
-    def visualize(self, show_image=True, save=True,name =""):
+    def visualize(self, show_image=True, save=True, name ="", is_solution=False):
         G = nx.DiGraph()
 
         pos = {}
@@ -104,6 +104,9 @@ class NeuralNetwork:
 
         plt.title("Neural Network")
         if(save):
-            plt.savefig(f'./topologies/{name}.png')
+            if (is_solution):
+                plt.savefig(f'./topology_images/solutions/{name}_solution.png')
+            else:
+                plt.savefig(f'./topology_images/generations/{name}.png')
         if (show_image):
             plt.show()

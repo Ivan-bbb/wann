@@ -25,14 +25,14 @@ def mse(y_true, y_pred):
 
 class CancerTask(Task):
     def __init__(self):
-        self.threshold = 0.9
+        self._threshold = 0.85
         input_data, output_data = init_dataset()
         self.train_data = input_data[:375]
         self.train_labels = output_data[:375]
         self.test_data = input_data[375:]
         self.test_labels = output_data[375:]
 
-        self._name = "Cancer"
+        self._name = "cancer"
         self._input_nodes = 9
         self._output_nodes = 2
         print(f"Starting '{self._name}' task with {self._input_nodes} inputs and {self._output_nodes} outputs")
@@ -48,6 +48,10 @@ class CancerTask(Task):
     @property
     def output_nodes(self) -> int:
         return self._output_nodes
+    
+    @property
+    def threshold(self) -> int:
+        return self._threshold
 
     def evaluate(self, neural_network: NeuralNetwork) -> float:
         total_fitness = 0
@@ -68,7 +72,7 @@ class CancerTask(Task):
     #     return correct / len(y_true)
 
     def solve(self, neural_network: NeuralNetwork) -> bool:
-        return self.evaluate(neural_network) > self.threshold
+        return self.evaluate(neural_network) > self._threshold
 
     def visualize(self, neural_network: NeuralNetwork):
         correct_train = 0

@@ -18,6 +18,11 @@ class Task(ABC):
     def output_nodes(self):
         pass
 
+    @property
+    @abstractmethod
+    def threshold(self):
+        pass
+
     @abstractmethod
     def evaluate(self, neural_network: NeuralNetwork):
         pass

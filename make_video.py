@@ -4,8 +4,8 @@ from natsort import natsorted
 import imageio
 from config import config
 
-task_name = "Cancer"
-folder_dir = f"./topologies/{task_name}"
+task_name = "diabetes"
+folder_dir = f"./topology_images/generations/{task_name}"
 
 filenames = glob.glob(f"{folder_dir}/*.png")
 filenames = natsorted(filenames)
@@ -17,7 +17,7 @@ fontScale = 2
 color = (255, 0, 0) 
 thickness = 2
 
-with imageio.get_writer(f"./videos/{task_name}.gif", mode="I", fps=1) as writer:
+with imageio.get_writer(f"./videos/{task_name}.gif", mode="I", fps=1, loop=0) as writer:
     for idx, frame in enumerate(images):
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         rgb_frame = cv2.putText(rgb_frame, f"Generation {idx*config.save_interval}", org, font, fontScale, color, thickness, cv2.LINE_AA)
