@@ -9,7 +9,7 @@
 
 Cancer:
 
-![](https://github.com/Ivan-bbb/wann/blob/main/graphs/cancer.png) 
+![](https://github.com/Ivan-bbb/wann/blob/main/graphs/Cancer.png) 
 
 Cart Pole:
 
@@ -21,7 +21,7 @@ Cart Pole:
 
 Cancer:
 
-![](https://github.com/Ivan-bbb/wann/blob/main/videos/cancer.gif) 
+![](https://github.com/Ivan-bbb/wann/blob/main/videos/Cancer.gif) 
 
 Cart Pole:
 
