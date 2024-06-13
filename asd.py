@@ -1,4 +1,5 @@
 import numpy as np
+import gymnasium as gym
 
 file_path = "data/diabetes/diabetes.raw"
 data_input = []

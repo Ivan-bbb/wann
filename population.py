@@ -99,7 +99,8 @@ class Population:
 
     def check_for_stagnation(self):
         for specie in self.species:
-            if specie.get_max_fitness <= specie.previous_max_fitness:
+            specie.update_max_fitness()
+            if specie.max_fitness <= specie.previous_max_fitness:
                 specie.no_improvement_age += 1
             else:
                 specie.no_improvement_age = 0

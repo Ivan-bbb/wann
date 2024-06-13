@@ -1,4 +1,4 @@
-from numpy import random
+import random
 from activation_functions import ActivationFunction
 from copy import deepcopy
 from config import config

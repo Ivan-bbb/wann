@@ -26,10 +26,9 @@ class Species:
         self.update_adjusted_fitness()
         self.average_adjusted_fitness = sum([g.adjusted_fitness for g in self.genomes]) / len(self.genomes)
 
-    def get_max_fitness(self):
+    def update_max_fitness(self):
         self.previous_max_fitness = self.max_fitness
         self.max_fitness = max(self.genomes, key=lambda genome: genome.fitness).fitness
-        return self.max_fitness
 
     def evolve_step(self):
         self.genomes = []

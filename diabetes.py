@@ -23,13 +23,13 @@ def init_dataset():
     max_values = np.amax(arr, axis=0)
     for i in range(len(data_input)):
         data_input[i] = data_input[i] / max_values
-        
+
     return data_input, data_output
 
 def mse(y_true, y_pred):
     return np.sum((y_true - y_pred) ** 2).mean()
 
-class CancerTask(Task):
+class DiabetesTask(Task):
     def __init__(self):
         self.threshold = 0.9
         input_data, output_data = init_dataset()
@@ -44,7 +44,7 @@ class CancerTask(Task):
         print(f"Starting '{self._name}' task with {self._input_nodes} inputs and {self._output_nodes} outputs")
     
     @property
-    def task_name(self) -> str:
+    def name(self) -> str:
         return self._name
 
     @property

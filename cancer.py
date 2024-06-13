@@ -38,7 +38,7 @@ class CancerTask(Task):
         print(f"Starting '{self._name}' task with {self._input_nodes} inputs and {self._output_nodes} outputs")
     
     @property
-    def task_name(self) -> str:
+    def name(self) -> str:
         return self._name
 
     @property
