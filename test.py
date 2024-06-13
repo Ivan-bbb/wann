@@ -17,7 +17,7 @@ if __name__ == "__main__":
             nn.set_weights(weight)
             population.task.evaluate(nn)
             print("Fitness =", population.task.evaluate(nn))
-            nn.visualize(save=False)
+            nn.visualize(show_image = True, save=False)
             population.task.visualize(nn)
         elif not test_only_on_best_weight:
             if abs(weight - nn.genome.best_weight) < 0.001:
@@ -27,11 +27,5 @@ if __name__ == "__main__":
             nn.set_weights(weight)
             population.task.evaluate(nn)
             print("Fitness =", population.task.evaluate(nn))
-            nn.visualize(save=False)
+            nn.visualize(show_image = True, save=False)
             population.task.visualize(nn)
-            # if abs(weight - nn.genome.best_weight) < 0.001 and test_only_on_best_weight:
-            #     print("Best weight result")
-            # nn.set_weights(weight)
-            # population.task.evaluate(nn)
-            # nn.visualize(save=False)
-            # population.task.visualize(nn)
