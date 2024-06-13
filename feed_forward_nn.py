@@ -74,7 +74,7 @@ class NeuralNetwork:
                     i * vertical_spacing + y_offset,
                 )
                 if layer == 0 and i == len(nodes) - 1:
-                    labels[node.id] = "bias"
+                    labels[node.id] = f"{node.id} ({node.layer})\nbias"
                 else:
                     labels[node.id] = f"{node.id} ({node.layer})\n{node.activation.name}"
 
@@ -88,15 +88,10 @@ class NeuralNetwork:
         colors = [G[u][v]["color"] for u, v in edges]
 
         plt.figure(figsize=(15, 10))
-        nx.draw(
-            G,
-            pos,
-            with_labels=True,
-            labels=labels,
-            node_size=2500,
-            node_color="orange",
-            font_size=8,
-            font_weight="bold",
+        nx.draw(G, pos,
+            with_labels=True, labels=labels,
+            node_size=2500, node_color="orange",
+            font_size=8, font_weight="bold",
             arrowsize=15,
             edge_color=colors,
         )

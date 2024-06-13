@@ -11,6 +11,7 @@ class Species:
         self.age: int = 0
         self.no_improvement_age: int = 0
         self.has_best_genome: bool = False
+        # возможное количество потомков
         self.offspring_number: int = 0
 
     def add_genome(self, genome: Genome):

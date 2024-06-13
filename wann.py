@@ -3,12 +3,13 @@ from activation_functions import ActivationFunction
 from copy import deepcopy
 from config import config
 
+# нейрон
 class Node:
     def __init__(self, id: int, layer: int, activation: ActivationFunction):
         self.id = id
         self.layer = layer
         self.activation = activation
-
+# связь
 class Connection:
     def __init__(self, from_node: Node, to_node: Node, enabled: bool, weight: float, innovation_number: int):
         self.from_node = from_node
@@ -20,7 +21,7 @@ class Connection:
     @property
     def connection_id(self):
         return self.from_node.id, self.to_node.id
-
+# глобальный трекер инноваций для скрещивания геномов
 class InnovationTracker:
     def __init__(self):
         self.innovations = {}
@@ -40,7 +41,7 @@ class InnovationTracker:
         self.current_innovation_number = 0
 
 innovation_tracker = InnovationTracker()
-
+# геном
 class Genome:
     def __init__(self):
         self.connections: dict[tuple[int, int], Connection] = dict()
@@ -76,14 +77,14 @@ class Genome:
         conn = random.choice(list(possible_connections))
         conn.enabled = True
 
-    def add_connection(self, from_node: Node, to_node: Node, weight: float) -> Connection:
+    def add_connection(self, from_node: Node, to_node: Node, weight: float = 1.0) -> Connection:
         connection = Connection(from_node, to_node, True, weight, innovation_number=innovation_tracker.get_innovation_number(from_node, to_node))
         self.connections[connection.connection_id] = connection
         return connection
     
     def mutate_add_connection(self):
         possible_connections = []
-
+        # возможны только прямые связи
         for n1 in self.nodes:
             for n2 in self.nodes:
                 if (n1.layer < n2.layer and (n1.id, n2.id) not in self.connections):
@@ -93,14 +94,14 @@ class Genome:
             return
 
         from_node, to_node = random.choice(possible_connections)
-        self.add_connection(from_node, to_node, 1.0)
+        self.add_connection(from_node, to_node)
 
     def add_node(self, layer: int) -> Node:
         node = Node(len(self.nodes), layer, random.choice(list(ActivationFunction)))
         self.nodes.append(node)
         return node
 
-    def mutate_split_connection(self):
+    def mutate_add_node(self):
         possible_connections = []
 
         for conn in self.connections.values():
@@ -109,7 +110,7 @@ class Genome:
 
         if not possible_connections:
             return
-
+        # на месте связи добавляется нейрон, а связь заменяется на 2 новые
         conn = random.choice(possible_connections)
         node = self.add_node(conn.from_node.layer + 1)
         self.add_connection(conn.from_node, node, conn.weight)
@@ -124,9 +125,9 @@ class Genome:
             self.mutate_enable_connection()
         if random.random() < config.prob_add_conn:
             self.mutate_add_connection()
-        if random.random() < config.prob_split_conn:
-            self.mutate_split_connection()
-
+        if random.random() < config.prob_add_node:
+            self.mutate_add_node()
+# скрещивание геномов при помощи оператора кроссинговера
 def connection_crossover(connection_id: tuple[int, int], genome1: Genome, genome2: Genome):
     conn = deepcopy(genome1.connections[connection_id])
     conn.enabled = (genome1.connections[connection_id].enabled and genome2.connections[connection_id].enabled) or random.random() > config.prob_enable_conn
@@ -134,7 +135,7 @@ def connection_crossover(connection_id: tuple[int, int], genome1: Genome, genome
 
 def genome_crossover(genome1: Genome, genome2: Genome) -> Genome:
     child = Genome()
-
+    # parent1 - наиболее приспособленный или с наибольшим количестом нейронов (если одинаковая приспособленность)
     if genome1.fitness > genome2.fitness:
         parent1, parent2 = genome1, genome2
     elif genome1.fitness < genome2.fitness:
@@ -142,20 +143,20 @@ def genome_crossover(genome1: Genome, genome2: Genome) -> Genome:
     else:
         parent1 = max(genome1, genome2, key=lambda x: len(x.nodes))
         parent2 = min(genome1, genome2, key=lambda x: len(x.nodes))
-
+    # копируем совпадающие нейроны
     for node, _ in zip(parent1.nodes, parent2.nodes):
         child.nodes.append(deepcopy(node))
-
+    # добавляем недостающие нейроны
     if len(parent1.nodes) > len(parent2.nodes):
         for node in parent1.nodes[len(parent2.nodes):]:
             child.nodes.append(deepcopy(node))
-
+    # добавляем связи
     intersection = (parent1.connections.keys() & parent2.connections.keys())
-
+    # общие связи
     for conn_id in intersection:
         conn = connection_crossover(conn_id, parent1, parent2)
         child.connections[conn_id] = conn
-
+    # копируем связи более приспособленного родителя
     if parent1.fitness == parent2.fitness:
         conn_union = parent1.connections | parent2.connections
     else:
@@ -166,7 +167,7 @@ def genome_crossover(genome1: Genome, genome2: Genome) -> Genome:
             child.connections[conn_id] = deepcopy(conn)
 
     return child
-
+# расстояние между геномами для разбиение их по видам
 def genome_distance(genome1: Genome, genome2: Genome):
     genome1_innovations = {c.innovation_number: c for c in genome1.connections.values()}
     genome2_innovations = {c.innovation_number: c for c in genome2.connections.values()}
