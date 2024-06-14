@@ -19,8 +19,6 @@ Cart Pole:
 
 Для просмотра результатов обучения поменяйте значение переменной task на нужную задачу в файле test.py и выполните команду "python test.py".
 
-Также можно сделать gif из сохраненных изображений, выполнив команду "python train.py". 
-
 Cancer:
 
 ![](https://github.com/Ivan-bbb/wann/blob/main/videos/Cancer.gif) 
