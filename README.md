@@ -9,20 +9,14 @@
 
 Параметры алгоритма задаются в файле config.py.
 
-Cancer:
-
-![](https://github.com/Ivan-bbb/wann/blob/main/graphs/Cancer.png) 
-
-Cart Pole:
-
-![](https://github.com/Ivan-bbb/wann/blob/main/graphs/cartPole.png)
-
 Для просмотра результатов обучения поменяйте значение переменной task на нужную задачу в файле test.py и выполните команду "python test.py".
 
-Cancer:
+Примеры работы алгоритма:
 
+Cancer:
+![](https://github.com/Ivan-bbb/wann/blob/main/graphs/Cancer.png) 
 ![](https://github.com/Ivan-bbb/wann/blob/main/videos/Cancer.gif) 
 
 Cart Pole:
-
+![](https://github.com/Ivan-bbb/wann/blob/main/graphs/cartPole.png)
 ![](https://github.com/Ivan-bbb/wann/blob/main/videos/cartPole.gif)
