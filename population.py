@@ -7,12 +7,6 @@ from feed_forward_nn import NeuralNetwork
 from species import Species
 from base_task import Task
 
-# турнирная выборка
-def tournament_selection(genomes: list[Genome], k):
-    selected = random.sample(genomes, k)
-    selected.sort(key=lambda genome: genome.fitness, reverse=True)
-    return selected[0]
-
 
 class Population:
     def __init__(self, task):
@@ -118,6 +112,11 @@ class Population:
         # решение есть, если хотя бы при одном весе приспособленность превышает порог, при этом общая приспособленность также должна быть выше пороговой
         if self.task.solve(nn) and winner.fitness >= self.task.threshold:
             self.solved_id = self.generation_id
+    # турнирная выборка
+    def tournament_selection(self, genomes: list[Genome], k):
+        selected = random.sample(genomes, k)
+        selected.sort(key=lambda genome: genome.fitness, reverse=True)
+        return selected[0]
     # функция для предотвращения доминации одного вида
     def reproduce_offspring(self):
         total_average = sum(specie.average_adjusted_fitness for specie in self.species)
@@ -149,8 +148,8 @@ class Population:
                     new_genomes.append(child)
                 # скрещивание и мутация
                 else:
-                    parent1 = deepcopy(tournament_selection(pool, min(len(pool), 3)))
-                    parent2 = deepcopy(tournament_selection(pool, min(len(pool), 3)))
+                    parent1 = deepcopy(self.tournament_selection(pool, min(len(pool), 3)))
+                    parent2 = deepcopy(self.tournament_selection(pool, min(len(pool), 3)))
                     child = genome_crossover(parent1, parent2)
                     child.mutate()
                     new_genomes.append(child)

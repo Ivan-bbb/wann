@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from config import config
 
-task = CancerTask
+task = CartPoleTask
 
 def save_genome(genome: Genome, postfix: str = ""):
     nn = NeuralNetwork(genome)
